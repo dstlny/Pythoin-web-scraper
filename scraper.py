@@ -22,11 +22,10 @@ def get_names_and_prices_of_products_on_given_page(page_url, header, write_to_fi
                 elif not product_name or not product_price:
                     print("Soup was unable to find the specified tag '<{}>' with an ID or Class of '.{}' and '<{}>' with an ID or Class of '.{}'".format(element_for_name,name_class,element_for_price,price_class))
         else:
-            print("got there")
             for product_name, product_price, postage_price in zip(soup.find_all(element_for_name, name_class, recursive=True), soup.find_all(element_for_price, price_class, recursive=True), soup.find_all(postage_element, postage_element_two, recursive=True)):
                 if product_name and product_price:
-                    strings_from_site.add("{} - \"{}\" has a price of £{} with {}".format(page_url,' '.join(product_name.get_text().strip().split()), float(price_str(product_price.get_text())),postage_price.get_text()))
-                    print("{} - \"{}\" has a price of £{} with {}".format(page_url,' '.join(product_name.get_text().strip().split()), float(price_str(product_price.get_text())),postage_price.get_text().strip().replace("\n","").replace("\t","").replace("\r","")))
+                    strings_from_site.add("{} - \"{}\" has a price of £{} with {}".format(page_url,' '.join(product_name.get_text().strip().split()), float(price_str(product_price.get_text())),postage_price.get_text().strip().split()))
+                    print("{} - \"{}\" has a price of £{} with {}".format(page_url,' '.join(product_name.get_text().strip().split()), float(price_str(product_price.get_text())),' '.join(postage_price.get_text().strip().split())))
                 elif not product_name or not product_price:
                     print("Soup was unable to find the specified tag '<{}>' with an ID or Class of '.{}' and '<{}>' with an ID or Class of '.{}' and '<{}>' with an ID or Class of '.{}'".format(element_for_name,name_class,element_for_price,price_class, postage_element, postage_element_two))
 
