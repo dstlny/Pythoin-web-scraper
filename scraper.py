@@ -17,16 +17,16 @@ def get_names_and_prices_of_products_on_given_page(page_url, header, write_to_fi
         if not postage_element and not postage_element_two:
             for product_name, product_price in zip(soup.find_all(element_for_name, name_class, recursive=True), soup.find_all(element_for_price, price_class, recursive=True)):
                 if product_name and product_price:
-                    strings_from_site.add("\"{}\" has a price of £{}".format(product_name.get_text().strip().replace("\n","").replace("\t","").replace("\r",""), float(price_str(product_price.get_text()))))
-                    print("\"{}\" has a price of £{}".format(product_name.get_text().strip().replace("\n","").replace("\t","").replace("\r",""), float(price_str(product_price.get_text()))))
+                    strings_from_site.add("{} - \"{}\" has a price of £{}".format(page_url,' '.join(product_name.get_text().strip().split()), float(price_str(product_price.get_text()))))
+                    print("{} - \"{}\" has a price of £{}".format(page_url,' '.join(product_name.get_text().strip().split()), float(price_str(product_price.get_text()))))
                 elif not product_name or not product_price:
                     print("Soup was unable to find the specified tag '<{}>' with an ID or Class of '.{}' and '<{}>' with an ID or Class of '.{}'".format(element_for_name,name_class,element_for_price,price_class))
         else:
             print("got there")
             for product_name, product_price, postage_price in zip(soup.find_all(element_for_name, name_class, recursive=True), soup.find_all(element_for_price, price_class, recursive=True), soup.find_all(postage_element, postage_element_two, recursive=True)):
                 if product_name and product_price:
-                    strings_from_site.add("\"{}\" has a price of £{} with {}".format(product_name.get_text().strip().replace("\n","").replace("\t","").replace("\r",""), float(price_str(product_price.get_text())),postage_price.get_text()))
-                    print("\"{}\" has a price of £{} with {}".format(product_name.get_text().strip().replace("\n","").replace("\t","").replace("\r",""), float(price_str(product_price.get_text())),postage_price.get_text().strip().replace("\n","").replace("\t","").replace("\r","")))
+                    strings_from_site.add("{} - \"{}\" has a price of £{} with {}".format(page_url,' '.join(product_name.get_text().strip().split()), float(price_str(product_price.get_text())),postage_price.get_text()))
+                    print("{} - \"{}\" has a price of £{} with {}".format(page_url,' '.join(product_name.get_text().strip().split()), float(price_str(product_price.get_text())),postage_price.get_text().strip().replace("\n","").replace("\t","").replace("\r","")))
                 elif not product_name or not product_price:
                     print("Soup was unable to find the specified tag '<{}>' with an ID or Class of '.{}' and '<{}>' with an ID or Class of '.{}' and '<{}>' with an ID or Class of '.{}'".format(element_for_name,name_class,element_for_price,price_class, postage_element, postage_element_two))
 
@@ -40,6 +40,7 @@ def get_names_and_prices_of_products_on_given_page(page_url, header, write_to_fi
         print("{} has been thrown".format(exception))
 
 def parse_given_xml_for_urls(xml_file, write_to_file, element_for_name, name_class, element_for_price, price_class, postage_element="null", postage_element_two="null"):
+    
     try:
         with open(xml_file) as fp:
             soup = BeautifulSoup(fp, 'lxml-xml')
@@ -53,46 +54,52 @@ def parse_given_xml_for_urls(xml_file, write_to_file, element_for_name, name_cla
 def do_actions(user_boolean, option, url="null"):
 
     if int(option) == 1:
-        element_name_one = input("Please enter the HTML element that contains the Products Name (e.g: p):\n")
-        element_name_two = input("Please enter the class or ID this element has:\n")
-        price_element = input("Please enter the HTML element that contains the Products Price (e.g: price):\n")
-        price_element_two = input("Please enter the class or ID this element has:\n")
-        postage = input("Does this site have postage price: Y or N\n")
-
+        
         try:
+            element_name_one = input("Please enter the HTML element that contains the Products Name (e.g: p):\n")
+            element_name_two = input("Please enter the class or ID this element has:\n")
+            price_element = input("Please enter the HTML element that contains the Products Price (e.g: price):\n")
+            price_element_two = input("Please enter the class or ID this element has:\n")
+            postage = input("Does this site have postage price: Y or N\n")
 
             if postage == 'Y':
                 postage_element = input("Please enter the HTML element that contains the Products Postage Price (e.g: postage):\n")
                 postage_element_two = input("Please enter the class or ID this element has:\n")
-                parse_given_xml_for_urls(url, user_boolean, element_name_one, element_name_two, price_element, price_element_two, postage_element, postage_element_two)
             else:
-                parse_given_xml_for_urls(url, user_boolean, element_name_one, element_name_two, price_element, price_element_two, "", "")
+                postage_element = ""
+                postage_element_two = ""
+
+            parse_given_xml_for_urls(url, user_boolean, element_name_one, element_name_two, price_element, price_element_two, postage_element, postage_element_two)
 
         except Exception as exception:
-                    print("{} has been thrown".format(exception))
+            print("{} has been thrown".format(exception))
 
     elif int(option) == 2:
-        element_name_one = input("Please enter the HTML element that contains the Products Name (e.g: p):\n")
-        element_name_two = input("Please enter the class or ID this element has:\n")
-        price_element = input("Please enter the HTML element that contains the Products Price (e.g: price):\n")
-        price_element_two = input("Please enter the class or ID this element has:\n")
-        postage = input("Does this site have postage price: Y or N\n")
         
         try:
 
+            element_name_one = input("Please enter the HTML element that contains the Products Name (e.g: p):\n")
+            element_name_two = input("Please enter the class or ID this element has:\n")
+            price_element = input("Please enter the HTML element that contains the Products Price (e.g: price):\n")
+            price_element_two = input("Please enter the class or ID this element has:\n")
+            postage = input("Does this site have postage price: Y or N\n")
+
             if postage == 'Y':
                 postage_element = input("Please enter the HTML element that contains the Products Postage Price (e.g: postage):\n")
                 postage_element_two = input("Please enter the class or ID this element has:\n")
-                get_names_and_prices_of_products_on_given_page(url, headers, user_boolean, element_name_one, element_name_two, price_element, price_element_two, postage_element, postage_element_two)
             else:
-                get_names_and_prices_of_products_on_given_page(url, headers, user_boolean, element_name_one, element_name_two, price_element, price_element_two, "", "")
+                postage_element = ""
+                postage_element_two = ""
+            
+            get_names_and_prices_of_products_on_given_page(url, headers, user_boolean, element_name_one, element_name_two, price_element, price_element_two, postage_element, postage_element_two)
 
         except Exception as exception:
-                    print("{} has been thrown".format(exception))
+            print("{} has been thrown".format(exception))
+
     else:
         print("{} is an incorrect option".format(option)) 
 
-print("If the script exits without warning after picking website etc, this means one of two things:\n1.: The site uses Javascript to dynamically build it's pages, which means we cannot request that page unless you know the specific URL it uses to do so.\n2. The tags/classes you entered do not exist on the page you specified, thus crashing the script..")
+print("If the script exits without warning after picking website etc, this means one of two things:\n1. The site uses Javascript to dynamically build it's pages, which means we cannot request that page unless you know the specific URL it uses to do so.\n2. The tags/classes you entered do not exist on the page you specified, thus crashing the script..")
 option = input("Choose an option:\n1: Import from XML\n2. Import from single URL\n")
 
 if int(option) == 1:
