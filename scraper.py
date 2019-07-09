@@ -14,18 +14,21 @@ def get_names_and_prices_of_products_on_given_page(page_url, header, write_to_fi
 
         strings_from_site = set()
 
+        strings_from_site.add(f"\n---------------------------------------------------------------------------------\n{page_url}\n---------------------------------------------------------------------------------")
+        print(f"\n---------------------------------------------------------------------------------\n{page_url}\n---------------------------------------------------------------------------------")
+
         if not postage_element and not postage_element_two:
             for product_name, product_price in zip(soup.find_all(element_for_name, name_class, recursive=True), soup.find_all(element_for_price, price_class, recursive=True)):
                 if product_name and product_price:
-                    strings_from_site.add(f"{page_url} - \"{' '.join(product_name.get_text().strip().split())}\" has a price of £{float(price_str(product_price.get_text()))}")
-                    print(f"{page_url} - \"{' '.join(product_name.get_text().strip().split())}\" has a price of £{float(price_str(product_price.get_text()))}")
+                    strings_from_site.add(f"\"{' '.join(product_name.get_text().strip().split())}\" has a price of £{float(price_str(product_price.get_text()))}")
+                    print(f"\"{' '.join(product_name.get_text().strip().split())}\" has a price of £{float(price_str(product_price.get_text()))}")
                 elif not product_name or not product_price:
                     print(f"Soup was unable to find the specified tag '<{element_for_name}>' with an ID or Class of '.{name_class}' and '<{element_for_price}>' with an ID or Class of '.{price_class}'")
         else:
             for product_name, product_price, postage_price in zip(soup.find_all(element_for_name, name_class, recursive=True), soup.find_all(element_for_price, price_class, recursive=True), soup.find_all(postage_element, postage_element_two, recursive=True)):
                 if product_name and product_price:
-                    strings_from_site.add(f"{page_url} - \"{' '.join(product_name.get_text().strip().split())}\" has a price of £{float(price_str(product_price.get_text()))} with {postage_price.get_text()}")
-                    print(f"{page_url} - \"{' '.join(product_name.get_text().strip().split())}\" has a price of £{float(price_str(product_price.get_text()))} with {postage_price.get_text()}")
+                    strings_from_site.add(f"\"{' '.join(product_name.get_text().strip().split())}\" has a price of £{float(price_str(product_price.get_text()))} with {postage_price.get_text()}")
+                    print(f"\"{' '.join(product_name.get_text().strip().split())}\" has a price of £{float(price_str(product_price.get_text()))} with {postage_price.get_text()}")
                 elif not product_name or not product_price:
                     print(f"Soup was unable to find the specified tag '<{element_for_name}>' with an ID or Class of '.{name_class}' and '<{element_for_price}>' with an ID or Class of '.{price_class}' and '<{postage_element}>' with an ID or Class of '.{postage_element_two}'")
 
